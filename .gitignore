@@ -1,0 +1,23 @@
+# Visual Studio / .NET build artifacts
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+.vs/
+*.user
+*.suo
+*.userprefs
+*.pidb
+*.booproj
+*.svclog
+*.crash
+*.stackdump
+
+# Windows thumbnails and desktop
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Rider / JetBrains
+.idea/
+*.sln.iml
