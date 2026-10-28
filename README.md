@@ -131,6 +131,6 @@ El archivo independiente compilado queda en:
 ---
 
 ## 📜 Licencia y Créditos
-- Desarrollado por **Fabrizio Riguetto**.
+- Desarrollado por **Fabricio Riguetto**.
 - Inspirado en la arquitectura y recetas de optimización de [**hellzerg/optimizerNXT**](https://github.com/hellzerg/optimizerNXT).
 - Componentes visuales provistos por [**WPF-UI**](https://github.com/lepoco/wpfui) (Lepo).
