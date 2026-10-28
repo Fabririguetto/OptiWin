@@ -21,8 +21,16 @@ namespace OptiWin.Core.Tweaks
         public string Title { get; set; } = "";
         public string Description { get; set; } = "";
         public string DetailedExplanation { get; set; } = "";
+        public string Warning { get; set; } = "";
         public string RegistryOrServiceDetails { get; set; } = "";
         public TweakCategory Category { get; set; }
+
+        public bool HasWarning => !string.IsNullOrWhiteSpace(Warning);
+
+        public string FullExplanationWithWarning =>
+            string.IsNullOrWhiteSpace(Warning)
+                ? DetailedExplanation
+                : $"{DetailedExplanation}\n\n⚠️ ADVERTENCIA: {Warning}";
 
         public bool IsEnabled
         {

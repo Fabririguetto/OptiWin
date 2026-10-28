@@ -1,8 +1,28 @@
 # ⚡ OptiWin PRO — Windows Performance, Privacy & Hardware Control
 
+<p align="center">
+  <img src="images/logo.png" alt="OptiWin PRO Logo" width="140">
+  <br><br>
+  <img src="images/banner.svg" alt="OptiWin PRO Banner" width="100%">
+</p>
+
 OptiWin es una aplicación de escritorio nativa de alto rendimiento desarrollada en **C# (.NET 8.0) y WPF** utilizando la librería oficial **WPF-UI (Windows 11 Fluent Design con efecto Mica)**.
 
-Inspirada en el motor y las recetas comprobadas de [**optimizerNXT**](https://github.com/hellzerg/optimizerNXT), OptiWin combina un **Tablero de Hardware en tiempo real**, perfiles de optimización en 1 clic y control total sobre el registro, servicios y privacidad de Windows con máxima transparencia.
+Inspirada en el motor y las recetas comprobadas de [**optimizerNXT**](https://github.com/hellzerg/optimizerNXT), OptiWin combina un **Tablero de Hardware en tiempo real**, perfiles de optimización en 1 clic y control total sobre el registro, servicios y privacidad de Windows con máxima transparencia y advertencias contextuales de seguridad.
+
+---
+
+## ⚠️ Advertencias y Descargo de Responsabilidad
+
+> [!WARNING]
+> **Uso bajo tu propia responsabilidad:** OptiWin realiza modificaciones a nivel de Registro de Windows (`HKLM`/`HKCU`), adaptadores de red (DNS), servicios en segundo plano y planes de energía. Aunque todas las opciones han sido probadas minuciosamente y son 100% reversibles, utilízalas con comprensión y criterio según el perfil de uso de tu equipo.
+
+> [!IMPORTANT]
+> **Recomendaciones previas y consideraciones de seguridad:**
+> 1. **Crea siempre un Punto de Restauración del Sistema:** Antes de aplicar cualquier perfil masivo (*Modo Gaming* o *Modo Creación*), utiliza el botón integrado **"Crear Punto Restauración"** en la barra lateral de OptiWin.
+> 2. **Privilegios de Administrador (UAC):** La herramienta requiere ejecutarse con permisos elevados (`requireAdministrator`) para poder escribir directivas del sistema en `HKEY_LOCAL_MACHINE` y gestionar servicios de Windows.
+> 3. **Falsos Positivos de Antivirus (Windows SmartScreen):** Al ser una aplicación en C# de código abierto sin un certificado comercial de firma de código digital de pago que interactúa con la memoria (`EmptyWorkingSet`) y claves sensibles del Registro, algunas soluciones antivirus o Windows SmartScreen pueden clasificarla preventivamente como sospechosa (*Riskware* / *HackTool*). El código fuente es 100% abierto, transparente y auditable en este repositorio.
+> 4. **Redes Corporativas y VPN:** Si utilizas el equipo en un entorno empresarial con Active Directory o VPN corporativa, cambiar los servidores DNS o bloquear directivas de telemetría podría sobrescribir políticas de red requeridas por tu organización.
 
 ---
 
@@ -23,12 +43,18 @@ Inspirada en el motor y las recetas comprobadas de [**optimizerNXT**](https://gi
 - 🎬 **Modo Creación / Render:** Prioridad máxima de procesamiento para CPU y GPU, vaciado masivo de RAM para buffers de renderizado y cierre rápido de aplicaciones secundarias.
 - 🔄 **Restaurar Fábrica:** Devuelve el plan de energía, los servidores DNS (a DHCP automático) y los ajustes del Registro a los valores predeterminados de Windows.
 
+*Cada perfil cuenta con su propio botón de información **`?`** para previsualizar los ajustes y advertencias antes de aplicarlos.*
+
 ---
 
-### 💡 3. Sistema de Explicación Detallada (`?`)
-Cada optimización cuenta con un botón interactivo **`?`**:
-- **Al pasar el cursor (Hover):** Muestra un ToolTip flotante estilizado con ajuste automático de línea que crece hacia abajo sin cortarse.
-- **Al hacer clic:** Abre una tarjeta modal dentro de la propia aplicación con la explicación detallada de lo que hace el tweak y la **ruta exacta de la clave de Registro (`HKLM`/`HKCU`) o Servicio de Windows** que modifica.
+### 💡 3. Sistema de Explicación Detallada y Advertencias (`?`)
+Cada optimización y perfil cuenta con un botón interactivo **`?`**:
+- **Al pasar el cursor (Hover):** Muestra un ToolTip flotante estilizado con ajuste automático de línea que detalla la función e incluye las advertencias operativas.
+- **En la tarjeta de cada tweak:** Indicador de advertencia destacado en color ámbar (`#fbbf24`) que resume posibles efectos secundarios.
+- **Al hacer clic:** Abre una tarjeta modal dentro de la propia aplicación con:
+  - **Explicación completa** de lo que hace el tweak.
+  - **Panel de Advertencia dedicado** en color ámbar/amarillo destacado (`#f59e0b`).
+  - **Ruta exacta de la clave de Registro (`HKLM`/`HKCU`) o Servicio de Windows** modificado.
 
 ---
 
@@ -82,6 +108,9 @@ Cada optimización cuenta con un botón interactivo **`?`**:
 
 ```plaintext
 OptiWin/
+├── images/
+│   ├── banner.svg            # Banner vectorial Fluent para el repositorio
+│   └── hero_banner.png       # Renderizado promocional en alta resolución
 ├── Core/
 │   ├── HardwareMonitor.cs    # Monitoreo de CPU (GetSystemTimes), Discos múltiples y Specs
 │   ├── GpuMonitor.cs         # Lectura en vivo de contadores GPU Engine 3D
@@ -96,12 +125,12 @@ OptiWin/
 │   ├── ServiceHelper.cs      # Control de servicios de Windows (Start / Stop / Disable)
 │   ├── AppLogger.cs          # Consola de actividad reactiva en tiempo real
 │   ├── Tweaks/
-│   │   ├── TweakModel.cs     # Modelo con propiedades técnicas y enlace reactivo
-│   │   └── TweakManager.cs   # Catálogo completo de optimizaciones
+│   │   ├── TweakModel.cs     # Modelo con propiedades técnicas, advertencias y enlace reactivo
+│   │   └── TweakManager.cs   # Catálogo completo con explicaciones y advertencias
 │   └── Profiles/
 │       └── ProfileManager.cs # Ejecución orquestada de perfiles (Gaming, Trabajo, Creación)
-├── MainWindow.xaml           # Interfaz moderna WPF-UI (Fluent, Mica, Dark Theme)
-├── MainWindow.xaml.cs        # Lógica de presentación, timers y ventanas modales
+├── MainWindow.xaml           # Interfaz moderna WPF-UI (Fluent, Mica, Dark Theme) con modales
+├── MainWindow.xaml.cs        # Lógica de presentación, timers, perfiles y modales explicativos
 ├── App.xaml                  # Diccionarios de temas y controles de WPF-UI
 ├── app.manifest              # Elevación de privilegios de Administrador (requireAdministrator)
 ├── .gitignore                # Reglas de exclusión para .NET y Visual Studio

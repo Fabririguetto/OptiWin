@@ -8,7 +8,13 @@
     <UseWPF>true</UseWPF>
     <ApplicationTitle>OptiWin - Windows Optimizer</ApplicationTitle>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\app.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\app.ico" />
+    <Resource Include="Assets\logo.png" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="10.0.14" />

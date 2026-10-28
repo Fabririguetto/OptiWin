@@ -188,6 +188,17 @@ namespace OptiWin
                 ModalTweakTitle.Text = tweak.Title;
                 ModalTweakExplanation.Text = tweak.DetailedExplanation;
                 ModalTweakTechDetails.Text = tweak.RegistryOrServiceDetails;
+
+                if (tweak.HasWarning)
+                {
+                    ModalTweakWarning.Text = tweak.Warning;
+                    ModalWarningBox.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    ModalWarningBox.Visibility = Visibility.Collapsed;
+                }
+
                 InfoModalOverlay.Visibility = Visibility.Visible;
             }
         }
@@ -199,10 +210,57 @@ namespace OptiWin
 
         // ================= PERFILES MASIVOS (ACCIONES EN 1 CLIC) =================
 
+        public void BtnInfoGaming_Click(object sender, RoutedEventArgs e)
+        {
+            ModalTweakTitle.Text = "🎮 Perfil 1-Clic: Modo Gaming de Alto Rendimiento";
+            ModalTweakExplanation.Text = "Configura el sistema para exprimir el 100% de la capacidad de tu CPU, tarjeta gráfica y red durante sesiones de juego, eliminando retrasos, latencias artificiales y cuellos de botella.";
+            ModalTweakWarning.Text = "Al forzar el plan Ultimate Performance y GPU Priority 8, el procesador y gráfica no entrarán en estados de bajo consumo mientras juegues, aumentando las temperaturas y el consumo de batería en notebooks. Además sobrescribirá los servidores DNS actuales por Cloudflare (1.1.1.1).";
+            ModalTweakTechDetails.Text = "• Plan de Energía: HKLM & powercfg -> Scheme 'Ultimate Performance'\n• Prioridad de GPU: HKLM\\...\\Multimedia\\SystemProfile\\Tasks\\Games -> GPU Priority = 8, Priority = 6\n• Network Throttling: Multimedia\\SystemProfile -> NetworkThrottlingIndex = 0xFFFFFFFF\n• System Responsiveness: Multimedia\\SystemProfile -> SystemResponsiveness = 0\n• DNS: Cloudflare IPv4 (1.1.1.1 / 1.0.0.1) & ipconfig /flushdns\n• Memoria RAM: EmptyWorkingSet en todos los procesos activos";
+            ModalWarningBox.Visibility = Visibility.Visible;
+            InfoModalOverlay.Visibility = Visibility.Visible;
+        }
+
+        public void BtnInfoWork_Click(object sender, RoutedEventArgs e)
+        {
+            ModalTweakTitle.Text = "💼 Perfil 1-Clic: Modo Trabajo y Productividad";
+            ModalTweakExplanation.Text = "Optimiza la fluidez y respuesta del entorno de oficina y programación, habilita el soporte de rutas largas (>260 caracteres), elimina la telemetría de navegadores y acelera la búsqueda en Inicio sin Bing.";
+            ModalTweakWarning.Text = "Configura los servidores DNS en Google (8.8.8.8). Si tu equipo se conecta a una red corporativa con servidores DNS internos o intranets empresariales, deberás reconfigurarlos manualmente.";
+            ModalTweakTechDetails.Text = "• Plan de Energía: Esquema Equilibrado de Windows\n• Búsqueda Local: HKCU\\...\\Search -> BingSearchEnabled = 0, CortanaConsent = 0\n• Soporte Rutas Largas: HKLM\\...\\FileSystem -> LongPathsEnabled = 1\n• Privacidad: DiagTrack detenido/deshabilitado, telemetría Edge/Chrome = 0\n• DNS: Google Public DNS (8.8.8.8 / 8.8.4.4)";
+            ModalWarningBox.Visibility = Visibility.Visible;
+            InfoModalOverlay.Visibility = Visibility.Visible;
+        }
+
+        public void BtnInfoCreator_Click(object sender, RoutedEventArgs e)
+        {
+            ModalTweakTitle.Text = "🎬 Perfil 1-Clic: Modo Creación de Contenido / Render";
+            ModalTweakExplanation.Text = "Diseñado para software de edición de video, renderizado 3D (Blender, Premiere, After Effects, DaVinci) y compilación pesada. Maximiza el cómputo de CPU/GPU y purga la memoria antes de renderizar.";
+            ModalTweakWarning.Text = "La liberación masiva de RAM vacía el Working Set de todos los programas en ejecución, lo cual puede producir micro-pausas transitorias de 1-2 segundos mientras las aplicaciones en segundo plano reasignan sus búferes.";
+            ModalTweakTechDetails.Text = "• Plan de Energía: Ultimate Performance\n• Prioridad Gráfica: GPU Priority = 8, Scheduling Category = High\n• Responsiveness: SystemResponsiveness = 0 (100% CPU)\n• Soporte Rutas: LongPathsEnabled = 1\n• Memoria RAM: Purga agresiva EmptyWorkingSet para maximizar buffer de render";
+            ModalWarningBox.Visibility = Visibility.Visible;
+            InfoModalOverlay.Visibility = Visibility.Visible;
+        }
+
+        public void BtnInfoRestore_Click(object sender, RoutedEventArgs e)
+        {
+            ModalTweakTitle.Text = "🔄 Perfil 1-Clic: Restaurar Valores de Fábrica";
+            ModalTweakExplanation.Text = "Regresa las directivas del sistema operativo a los estándares predeterminados recomendados por Microsoft, revirtiendo tweaks de registro, servicios y configuración de red modificados.";
+            ModalTweakWarning.Text = "Se eliminarán todas las optimizaciones aplicadas previamente. Los adaptadores de red volverán a solicitar DNS dinámicos por DHCP y el plan de energía regresará al estándar Equilibrado.";
+            ModalTweakTechDetails.Text = "• Plan de Energía: Restaurar GUID Equilibrado (381b4222-f694-41f0-9685-ff5bb260df2e)\n• Red & DNS: Revertir a automático por DHCP (EnableDHCP) y vaciado de caché DNS\n• Tweaks: Desactivación y restauración de valores por defecto en todo el catálogo";
+            ModalWarningBox.Visibility = Visibility.Visible;
+            InfoModalOverlay.Visibility = Visibility.Visible;
+        }
+
         private async void BtnProfileGaming_Click(object sender, RoutedEventArgs e)
         {
             var res = MessageBox.Show(
-                "¿Deseas activar el MODO GAMING?\n\n• Plan Ultimate Performance\n• GPU Priority Máxima & Latencia 0\n• Network Throttling Desactivado\n• DNS Cloudflare (1.1.1.1)\n• Vaciado de memoria RAM",
+                "¿Deseas activar el MODO GAMING?\n\n" +
+                "• Plan Ultimate Performance\n" +
+                "• GPU Priority Máxima & Latencia 0\n" +
+                "• Network Throttling Desactivado\n" +
+                "• DNS Cloudflare (1.1.1.1)\n" +
+                "• Vaciado de memoria RAM\n\n" +
+                "⚠️ ADVERTENCIA:\n" +
+                "Aumentará el consumo de energía y temperaturas en notebooks. Sobrescribirá las configuraciones DNS previas.",
                 "Modo Gaming - OptiWin",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Information);
@@ -219,7 +277,14 @@ namespace OptiWin
         private async void BtnProfileWork_Click(object sender, RoutedEventArgs e)
         {
             var res = MessageBox.Show(
-                "¿Deseas activar el MODO TRABAJO?\n\n• Plan de energía equilibrado\n• Búsqueda local instantánea sin Bing\n• Soporte de Rutas Largas habilitado\n• Telemetría de Office y Navegadores bloqueada\n• DNS Google (8.8.8.8)",
+                "¿Deseas activar el MODO TRABAJO?\n\n" +
+                "• Plan de energía equilibrado\n" +
+                "• Búsqueda local instantánea sin Bing\n" +
+                "• Soporte de Rutas Largas habilitado\n" +
+                "• Telemetría de Office y Navegadores bloqueada\n" +
+                "• DNS Google (8.8.8.8)\n\n" +
+                "⚠️ ADVERTENCIA:\n" +
+                "Asignará DNS 8.8.8.8. Si tu red requiere DNS corporativo interno, reconfigúralo tras aplicar el perfil.",
                 "Modo Trabajo - OptiWin",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Information);
@@ -236,7 +301,12 @@ namespace OptiWin
         private async void BtnProfileCreator_Click(object sender, RoutedEventArgs e)
         {
             var res = MessageBox.Show(
-                "¿Deseas activar el MODO CREACIÓN / RENDER?\n\n• Máximo procesamiento de CPU y GPU\n• Vaciado masivo de RAM previo a renders\n• Cierre rápido de procesos colgados",
+                "¿Deseas activar el MODO CREACIÓN / RENDER?\n\n" +
+                "• Máximo procesamiento de CPU y GPU\n" +
+                "• Vaciado masivo de RAM previo a renders\n" +
+                "• Cierre rápido de procesos colgados\n\n" +
+                "⚠️ ADVERTENCIA:\n" +
+                "El vaciado profundo de RAM puede generar micro-pausas transitorias de 1-2 segundos en apps de fondo.",
                 "Modo Creación - OptiWin",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Information);
@@ -253,7 +323,10 @@ namespace OptiWin
         private async void BtnProfileRestore_Click(object sender, RoutedEventArgs e)
         {
             var res = MessageBox.Show(
-                "¿Deseas restaurar la configuración original de fábrica de Windows?\n\nSe restablecerán los planes de energía, DNS por defecto y ajustes predeterminados.",
+                "¿Deseas restaurar la configuración original de fábrica de Windows?\n\n" +
+                "Se restablecerán los planes de energía, DNS por defecto y ajustes predeterminados.\n\n" +
+                "⚠️ ADVERTENCIA:\n" +
+                "Se revertirán todas las personalizaciones y optimizaciones aplicadas.",
                 "Restaurar Fábrica - OptiWin",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Warning);

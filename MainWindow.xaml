@@ -6,6 +6,7 @@
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
         mc:Ignorable="d"
         Title="OptiWin - Centro de Rendimiento y Privacidad para Windows" 
+        Icon="pack://application:,,,/Assets/app.ico"
         Height="820" Width="1200"
         MinHeight="700" MinWidth="1000"
         WindowStartupLocation="CenterScreen"
@@ -14,6 +15,8 @@
         Foreground="{DynamicResource TextFillColorPrimaryBrush}">
 
     <ui:FluentWindow.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+
         <!-- ToolTip Estilizado Fluent con Ajuste Automático de Línea (Wrap) -->
         <Style TargetType="ToolTip">
             <Setter Property="Background" Value="#181d28"/>
@@ -83,7 +86,10 @@
         </Grid.RowDefinitions>
 
         <!-- FLUENT TITLEBAR -->
-        <ui:TitleBar Grid.Row="0" Title="OptiWin PRO — Optimizador de Windows 11 / 10" Icon="⚡">
+        <ui:TitleBar Grid.Row="0" Title="OptiWin PRO — Optimizador de Windows 11 / 10">
+            <ui:TitleBar.Icon>
+                <ui:ImageIcon Source="pack://application:,,,/Assets/app.ico"/>
+            </ui:TitleBar.Icon>
             <ui:TitleBar.Header>
                 <!-- Quick Metrics in TitleBar -->
                 <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
@@ -177,17 +183,49 @@
                             <TextBlock Grid.Row="0" Text="⚡ PERFILES DE OPTIMIZACIÓN EN 1 CLIC" FontSize="11.5" FontWeight="Bold" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Margin="0,0,0,10"/>
 
                             <StackPanel Grid.Row="1" Orientation="Horizontal">
-                                <ui:Button Content="Modo Gaming" Appearance="Danger" Icon="{ui:SymbolIcon Flash24}" Margin="0,0,10,0" Click="BtnProfileGaming_Click" 
-                                           ToolTip="Activa plan de energía Ultimate Performance, GPU Priority 8, Network Throttling desactivado, vacía RAM y asigna DNS Cloudflare."/>
+                                <!-- Modo Gaming -->
+                                <StackPanel Orientation="Horizontal" Margin="0,0,12,0">
+                                    <ui:Button Content="Modo Gaming" Appearance="Danger" Icon="{ui:SymbolIcon Flash24}" Click="BtnProfileGaming_Click" 
+                                               ToolTip="🎮 MODO GAMING: Activa plan Ultimate Performance, GPU Priority 8, Network Throttling desactivado, vacía RAM y asigna DNS Cloudflare (1.1.1.1).&#x0a;&#x0a;⚠️ ADVERTENCIA: Aumenta el consumo de energía y temperaturas en notebooks. Sobrescribe la configuración DNS previa."/>
+                                    <ui:Button Appearance="Transparent" Width="28" Height="28" Padding="0" Margin="4,0,0,0" Click="BtnInfoGaming_Click" ToolTip="Ver detalles técnicos y advertencia del Modo Gaming">
+                                        <Border Width="20" Height="20" Background="{DynamicResource SubtleFillColorSecondaryBrush}" CornerRadius="10">
+                                            <TextBlock Text="?" FontWeight="Bold" FontSize="11" Foreground="#38bdf8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ui:Button>
+                                </StackPanel>
                                 
-                                <ui:Button Content="Modo Trabajo" Appearance="Primary" Icon="{ui:SymbolIcon Briefcase24}" Margin="0,0,10,0" Click="BtnProfileWork_Click"
-                                           ToolTip="Modo equilibrado: búsqueda local instantánea sin Bing, soporte de rutas largas (>260 caracteres), telemetría bloqueada y DNS Google."/>
+                                <!-- Modo Trabajo -->
+                                <StackPanel Orientation="Horizontal" Margin="0,0,12,0">
+                                    <ui:Button Content="Modo Trabajo" Appearance="Primary" Icon="{ui:SymbolIcon Briefcase24}" Click="BtnProfileWork_Click"
+                                               ToolTip="💼 MODO TRABAJO: Búsqueda local instantánea sin Bing, soporte de rutas largas (>260 caracteres), telemetría bloqueada y DNS Google (8.8.8.8).&#x0a;&#x0a;⚠️ ADVERTENCIA: Asigna DNS 8.8.8.8 (reconfigurar manualmente si tu red requiere DNS corporativo)."/>
+                                    <ui:Button Appearance="Transparent" Width="28" Height="28" Padding="0" Margin="4,0,0,0" Click="BtnInfoWork_Click" ToolTip="Ver detalles técnicos y advertencia del Modo Trabajo">
+                                        <Border Width="20" Height="20" Background="{DynamicResource SubtleFillColorSecondaryBrush}" CornerRadius="10">
+                                            <TextBlock Text="?" FontWeight="Bold" FontSize="11" Foreground="#38bdf8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ui:Button>
+                                </StackPanel>
                                 
-                                <ui:Button Content="Modo Creación" Appearance="Secondary" Icon="{ui:SymbolIcon Video24}" Margin="0,0,10,0" Click="BtnProfileCreator_Click"
-                                           ToolTip="Máximo procesamiento de CPU/GPU, vaciado de RAM previo a renders y cierre rápido de procesos colgados."/>
+                                <!-- Modo Creación -->
+                                <StackPanel Orientation="Horizontal" Margin="0,0,12,0">
+                                    <ui:Button Content="Modo Creación" Appearance="Secondary" Icon="{ui:SymbolIcon Video24}" Click="BtnProfileCreator_Click"
+                                               ToolTip="🎬 MODO CREACIÓN / RENDER: Máximo procesamiento de CPU/GPU, vaciado agresivo de RAM previo a renders y cierre rápido de procesos colgados.&#x0a;&#x0a;⚠️ ADVERTENCIA: La purga masiva de memoria puede provocar micro-pausas transitorias mientras los programas reasignan búferes."/>
+                                    <ui:Button Appearance="Transparent" Width="28" Height="28" Padding="0" Margin="4,0,0,0" Click="BtnInfoCreator_Click" ToolTip="Ver detalles técnicos y advertencia del Modo Creación">
+                                        <Border Width="20" Height="20" Background="{DynamicResource SubtleFillColorSecondaryBrush}" CornerRadius="10">
+                                            <TextBlock Text="?" FontWeight="Bold" FontSize="11" Foreground="#38bdf8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ui:Button>
+                                </StackPanel>
                                 
-                                <ui:Button Content="Restaurar Fábrica" Appearance="Transparent" Icon="{ui:SymbolIcon ArrowReset24}" Click="BtnProfileRestore_Click"
-                                           ToolTip="Devuelve todos los ajustes al estándar original de Windows y DNS automático por DHCP."/>
+                                <!-- Restaurar Fábrica -->
+                                <StackPanel Orientation="Horizontal">
+                                    <ui:Button Content="Restaurar Fábrica" Appearance="Transparent" Icon="{ui:SymbolIcon ArrowReset24}" Click="BtnProfileRestore_Click"
+                                               ToolTip="🔄 RESTAURAR FÁBRICA: Devuelve el plan de energía, servidores DNS (DHCP automático) y registro a los valores originales de Windows.&#x0a;&#x0a;⚠️ ADVERTENCIA: Revertirá todas las optimizaciones aplicadas previamente."/>
+                                    <ui:Button Appearance="Transparent" Width="28" Height="28" Padding="0" Margin="4,0,0,0" Click="BtnInfoRestore_Click" ToolTip="Ver detalles de la Restauración de Fábrica">
+                                        <Border Width="20" Height="20" Background="{DynamicResource SubtleFillColorSecondaryBrush}" CornerRadius="10">
+                                            <TextBlock Text="?" FontWeight="Bold" FontSize="11" Foreground="#38bdf8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ui:Button>
+                                </StackPanel>
                             </StackPanel>
                         </Grid>
                     </ui:Card>
@@ -339,11 +377,16 @@
                                             <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,14,0">
                                                 <TextBlock Text="{Binding Title}" FontSize="14.5" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
                                                 <TextBlock Text="{Binding Description}" FontSize="12.5" Foreground="{DynamicResource TextFillColorSecondaryBrush}" TextWrapping="Wrap" Margin="0,4,0,0"/>
+                                                <!-- Advertencia destacada en otro color -->
+                                                <StackPanel Orientation="Horizontal" Margin="0,6,0,0" Visibility="{Binding HasWarning, Converter={StaticResource BoolToVis}}">
+                                                    <TextBlock Text="⚠️ " FontSize="11" Foreground="#f59e0b" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="{Binding Warning}" FontSize="11.5" Foreground="#fbbf24" TextWrapping="Wrap"/>
+                                                </StackPanel>
                                             </StackPanel>
                                             
                                             <!-- Botón de Información / Explicación ? (Hover y Clic) -->
                                             <ui:Button Grid.Column="1" Appearance="Transparent" Padding="2" Width="32" Height="32" Cursor="Hand" Margin="0,0,14,0"
-                                                       Click="BtnInfoTweak_Click" ToolTipService.InitialShowDelay="50" ToolTipService.ShowDuration="60000" ToolTip="{Binding DetailedExplanation}">
+                                                       Click="BtnInfoTweak_Click" ToolTipService.InitialShowDelay="50" ToolTipService.ShowDuration="60000" ToolTip="{Binding FullExplanationWithWarning}">
                                                 <Border Width="24" Height="24" Background="{DynamicResource SubtleFillColorSecondaryBrush}" CornerRadius="12">
                                                     <TextBlock Text="?" FontWeight="Bold" FontSize="13" Foreground="#38bdf8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                                 </Border>
@@ -383,11 +426,16 @@
                                             <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,14,0">
                                                 <TextBlock Text="{Binding Title}" FontSize="14.5" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
                                                 <TextBlock Text="{Binding Description}" FontSize="12.5" Foreground="{DynamicResource TextFillColorSecondaryBrush}" TextWrapping="Wrap" Margin="0,4,0,0"/>
+                                                <!-- Advertencia destacada en otro color -->
+                                                <StackPanel Orientation="Horizontal" Margin="0,6,0,0" Visibility="{Binding HasWarning, Converter={StaticResource BoolToVis}}">
+                                                    <TextBlock Text="⚠️ " FontSize="11" Foreground="#f59e0b" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="{Binding Warning}" FontSize="11.5" Foreground="#fbbf24" TextWrapping="Wrap"/>
+                                                </StackPanel>
                                             </StackPanel>
                                             
                                             <!-- Botón de Información / Explicación ? (Hover y Clic) -->
                                             <ui:Button Grid.Column="1" Appearance="Transparent" Padding="2" Width="32" Height="32" Cursor="Hand" Margin="0,0,14,0"
-                                                       Click="BtnInfoTweak_Click" ToolTipService.InitialShowDelay="50" ToolTipService.ShowDuration="60000" ToolTip="{Binding DetailedExplanation}">
+                                                       Click="BtnInfoTweak_Click" ToolTipService.InitialShowDelay="50" ToolTipService.ShowDuration="60000" ToolTip="{Binding FullExplanationWithWarning}">
                                                 <Border Width="24" Height="24" Background="{DynamicResource SubtleFillColorSecondaryBrush}" CornerRadius="12">
                                                     <TextBlock Text="?" FontWeight="Bold" FontSize="13" Foreground="#38bdf8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                                 </Border>
@@ -655,6 +703,17 @@
                             <TextBlock Text="¿QUÉ HACE ESTA OPTIMIZACIÓN?" FontSize="11.5" FontWeight="Bold" Foreground="#38bdf8" Margin="0,0,0,6"/>
                             <TextBlock x:Name="ModalTweakExplanation" Text="..." FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}" 
                                        TextWrapping="Wrap" LineHeight="20" Margin="0,0,0,16"/>
+
+                            <!-- Advertencia y consideraciones en color ámbar/amarillo destacado -->
+                            <Border x:Name="ModalWarningBox" Background="#261a05" BorderBrush="#f59e0b" BorderThickness="1" CornerRadius="8" Padding="12" Margin="0,0,0,16" Visibility="Collapsed">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                        <TextBlock Text="⚠️ " FontSize="12" VerticalAlignment="Center"/>
+                                        <TextBlock Text="ADVERTENCIA Y EFECTOS SECUNDARIOS" FontSize="11" FontWeight="Bold" Foreground="#f59e0b"/>
+                                    </StackPanel>
+                                    <TextBlock x:Name="ModalTweakWarning" Text="..." FontSize="12.5" Foreground="#fef08a" TextWrapping="Wrap" LineHeight="18"/>
+                                </StackPanel>
+                            </Border>
 
                             <TextBlock Text="DETALLES TÉCNICOS (REGISTRO / SERVICIO MODIFICADO)" FontSize="11.5" FontWeight="Bold" Foreground="#f59e0b" Margin="0,0,0,6"/>
                             <Border Background="#0d1117" BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="8" Padding="14">
